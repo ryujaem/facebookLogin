@@ -11,7 +11,7 @@ build-job:       # 빌드 단계
   script:
     - echo "Build application..."
     - gradle bootJar
-    - docker build -t $DOCKER_IMAGE_NAME .
+    - docker build -t byaht/tmap-spring:0.1.2 .
     - echo "Application successfully build..."
 deploy-job:      # 배포 단계
   stage: deploy
@@ -19,5 +19,5 @@ deploy-job:      # 배포 단계
     - main
   script:
     - echo "Deploying application..."
-    - docker push $DOCKER_IMAGE_NAME
+    - docker push byaht/tmap-spring:0.1.2
     - echo "Application successfully deployed."
