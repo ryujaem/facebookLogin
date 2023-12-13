@@ -1,23 +1,15 @@
-stages:          # 파이프라인 단계 정의
-  - build
-  - deploy
+stages:
+  - dockerbuild-push
 
-variables:
-  DOCKER_IMAGE_NAME: byaht/tmap-spring:0.1.2
-
-build-job:       # 빌드 단계
-  stage: build
-  image: gradle:jdk17
+package:
+  image: docker:latest
+  stage: dockerbuild-push
+  services:
+    - docker:dind
+  before_script:
+    - docker login registry.gitlab.com -u $GITLAB_USER -p $GITLAB_PASSWORD
   script:
-    - echo "Build application..."
-    - gradle bootJar
-    - docker build -t byaht/tmap-spring:0.1.2 .
-    - echo "Application successfully build..."
-deploy-job:      # 배포 단계
-  stage: deploy
-  only:
-    - main
-  script:
-    - echo "Deploying application..."
-    - docker push byaht/tmap-spring:0.1.2
-    - echo "Application successfully deployed."
+    - docker build -t registry.gitlab.com/$GITLAB_USER/$PROJECT_NAME . 
+    - docker push registry.gitlab.com/$GITLAB_USER/$PROJECT_NAME
+  after_script:
+    - docker logout
