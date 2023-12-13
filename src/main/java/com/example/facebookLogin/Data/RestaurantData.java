@@ -35,7 +35,7 @@ public class RestaurantData {
     @Column(name = "tel")
     private String tel;
 
-    @Column(name = "time")
+    @Column(name = "date")
     private String time;
 
     @ManyToOne

@@ -8,6 +8,7 @@ public class FacebookLoginApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FacebookLoginApplication.class, args);
+		System.out.println("#################### Server status ON ####################");
 	}
 
 }

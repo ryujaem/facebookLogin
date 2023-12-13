@@ -40,6 +40,6 @@ public class ReviewData {
     @Column(name = "RESTAURANTS_name")
     private String restaurantsName;
 
-    @Column(name = "time")
+    @Column(name = "date")
     private String time;
 }
