@@ -1,13 +1,15 @@
 FROM gradle:jdk17 as builder
 
-# 작업 디렉토리 설정
-WORKDIR /home/gradle/src
+WORKDIR /build
 
-# 소스 코드 복사
-COPY --chown=gradle:gradle . /home/gradle/src
+# 그래들 파일이 변경되었을 때만 새롭게 의존패키지 다운로드 받게함.
+COPY build.gradle settings.gradle /build/
+RUN gradle build -x test --parallel --continue > /dev/null 2>&1 || true
 
-# Gradle을 사용하여 애플리케이션 빌드
-RUN gradle bootJar --no-daemon
+# 빌더 이미지에서 애플리케이션 빌드
+COPY . /build
+RUN gradle build -x test --parallel
+
 
 FROM openjdk:17-oracle
 
