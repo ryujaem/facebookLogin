@@ -12,13 +12,22 @@ RUN gradle build -x test --parallel
 
 
 FROM openjdk:17-oracle
+WORKDIR /app
 
-# 빌드 단계에서 생성된 JAR 파일 복사
-COPY --from=builder /home/gradle/src/build/libs/*.jar /app/app.jar
+# 빌더 이미지에서 jar 파일만 복사
+COPY --from=builder /build/build/libs/*-SNAPSHOT.jar ./app.jar
 
-# 애플리케이션 실행
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+EXPOSE 8080
 
+# root 대신 nobody 권한으로 실행
+USER nobody
+ENTRYPOINT [                                                \
+    "java",                                                 \
+    "-jar",                                                 \
+    "-Djava.security.egd=file:/dev/./urandom",              \
+    "-Dsun.net.inetaddr.ttl=0",                             \
+    "app.jar"              \
+]
 
 #ARG JAR_FILE=build/libs/facebookLogin-0.0.1-SNAPSHOT.jar
 #COPY ${JAR_FILE} app.jar
