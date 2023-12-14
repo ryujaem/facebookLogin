@@ -5,7 +5,7 @@ WORKDIR /build
 
 # 소스 코드 복사
 COPY build.gradle settings.gradle /build/
-RUN gradle build -x test --parallel --continue > /dev/null 2>&1 || true정
+RUN gradle build -x test --parallel --continue > /dev/null 2>&1 || true
 
 # Gradle을 사용하여 애플리케이션 빌드
 COPY . /build
