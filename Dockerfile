@@ -1,15 +1,13 @@
 FROM gradle:jdk17 as builder
 
 # 작업 디렉토리 설정
-WORKDIR /build
+WORKDIR /home/gradle/src
 
 # 소스 코드 복사
-COPY build.gradle settings.gradle /build/
-RUN gradle build -x test --parallel --continue > /dev/null 2>&1 || true
+COPY --chown=gradle:gradle . /home/gradle/src
 
 # Gradle을 사용하여 애플리케이션 빌드
-COPY . /build
-RUN gradle build -x test --parallel
+RUN gradle bootJar --no-daemon
 
 FROM openjdk:17-oracle
 
